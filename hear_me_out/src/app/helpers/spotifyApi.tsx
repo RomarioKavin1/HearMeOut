@@ -46,6 +46,79 @@ export async function exchangetoken(code: string): Promise<string[]> {
     return ["error", "error", "error"];
   }
 }
+interface SpotifyArtist {
+  // Define the artist properties you need, e.g., name, id, genres, etc.
+  name: string;
+  id: string;
+  genres: string[];
+  // Add more properties as needed
+}
 
-// Usage example:
-// getCurrentlyPlaying('your_spotify_access_token_here');
+async function getTopArtists(
+  accessToken: string,
+  timeRange: string = "medium_term",
+  limit: number = 20,
+  offset: number = 0
+): Promise<SpotifyArtist[]> {
+  const url = `https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}&limit=${limit}&offset=${offset}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Spotify API error: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    return data.items; // Assuming the response structure contains an 'items' array
+  } catch (error) {
+    console.error("Failed to fetch top artists:", error);
+    throw error;
+  }
+}
+
+interface SpotifyTrack {
+  name: string;
+  id: string;
+  artists: { name: string; id: string }[];
+  album: string;
+}
+
+async function getTopTracks(
+  accessToken: string,
+  timeRange: string = "medium_term",
+  limit: number = 20,
+  offset: number = 0
+): Promise<SpotifyTrack[]> {
+  const url = `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=${limit}&offset=${offset}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Spotify API error: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    return data.items; // Assuming the response structure contains an 'items' array
+  } catch (error) {
+    console.error("Failed to fetch top tracks:", error);
+    throw error;
+  }
+}
