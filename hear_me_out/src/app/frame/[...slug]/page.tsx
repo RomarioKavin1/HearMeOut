@@ -1,13 +1,13 @@
 import { getFrameMetadata } from "@coinbase/onchainkit/frame";
 import type { Metadata } from "next";
-import { NEXT_PUBLIC_URL } from "../config";
+import { NEXT_PUBLIC_URL } from "../../config";
 import Link from "next/link";
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: "Home",
+      label: "What Am I listening to ?",
       action: "post",
-      target: `${NEXT_PUBLIC_URL}/`,
+      target: `${NEXT_PUBLIC_URL}/nowlistening`,
     },
     {
       label: "My stats",
@@ -20,7 +20,7 @@ const frameMetadata = getFrameMetadata({
     },
   ],
   image: {
-    src: `${NEXT_PUBLIC_URL}/api/image?fid=123`,
+    src: `${NEXT_PUBLIC_URL}/hearmeout.png`,
     aspectRatio: "1.91:1",
   },
   input: {
@@ -45,22 +45,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div>
-      <h1>Login Page</h1>
-      <Link href="/api/login">
-        <button>Login with Spotify</button>
-      </Link>
-      {/* {accessToken && (
-          <div>
-            <h2>Access Token:</h2>
-            <p>{accessToken}</p>
-          </div>
-        )}
-        {refreshToken && (
-          <div>
-            <h2>Refresh Token:</h2>
-            <p>{refreshToken}</p>
-          </div>
-        )} */}
+      <>Your frame</>
     </div>
   );
 }

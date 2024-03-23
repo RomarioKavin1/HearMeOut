@@ -7,7 +7,14 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
     const fontFilePath = join(process.cwd(), "public", "Lato-Regular.ttf");
     const fontData = fs.readFileSync(fontFilePath);
-    const id = 123;
+    const dat = {
+      artist: "weeknd",
+      song: "blinding lights",
+      albumCover:
+        "https://i.scdn.co/image/ab67616d00001e024718e2b124f79258be7bc452",
+    };
+    const fid = req.nextUrl.searchParams.get("fid");
+    const { artist, song, albumCover } = dat;
     let pollSvg;
     pollSvg = await satori(
       <div
@@ -49,7 +56,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             className="album-cover"
           >
             <img
-              src="https://i.scdn.co/image/ab67616d00001e024718e2b124f79258be7bc452"
+              src={albumCover}
               alt="Album cover"
               style={{ width: "100%", height: "100%", borderRadius: "50%" }}
             />
@@ -76,13 +83,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
                 }}
                 className="song-title"
               >
-                Starboy
+                {song}
               </div>
               <p
                 style={{ fontSize: "12px", color: "#b3b3b3", margin: "0" }}
                 className="artist"
               >
-                Weeknd
+                {artist}
               </p>
             </div>
             <div
