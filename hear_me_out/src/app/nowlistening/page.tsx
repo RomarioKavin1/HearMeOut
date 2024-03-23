@@ -20,7 +20,7 @@ const frameMetadata = getFrameMetadata({
     },
   ],
   image: {
-    src: `${NEXT_PUBLIC_URL}/api/image?fid=123`,
+    src: `${NEXT_PUBLIC_URL}/api/listeningframe?fid=372953`,
     aspectRatio: "1.91:1",
   },
   input: {
@@ -49,18 +49,6 @@ export default function Page() {
       <Link href="/api/login">
         <button>Login with Spotify</button>
       </Link>
-      {/* {accessToken && (
-          <div>
-            <h2>Access Token:</h2>
-            <p>{accessToken}</p>
-          </div>
-        )}
-        {refreshToken && (
-          <div>
-            <h2>Refresh Token:</h2>
-            <p>{refreshToken}</p>
-          </div>
-        )} */}
     </div>
   );
 }

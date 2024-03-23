@@ -18,7 +18,6 @@ export async function getCurrentlyPlaying(accessToken: string) {
     }
 
     const data = await response.json(); // Assuming the response is JSON-formatted
-    console.log("Currently playing track data:", data);
     return data; // Return the data for further processing
   } catch (error) {
     console.error("Error fetching currently playing track:", error);
@@ -41,7 +40,6 @@ export async function exchangetoken(code: string): Promise<string[]> {
     }
 
     const data = await response.json();
-    console.log("Token data:", data);
     return [data.access_token, data.refresh_token, data.expires_in];
   } catch (error) {
     console.error("Error exchanging token:", error);
