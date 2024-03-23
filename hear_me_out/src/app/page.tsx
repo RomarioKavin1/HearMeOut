@@ -1,27 +1,77 @@
-import { fetchMetadata } from "frames.js/next";
+import { getFrameMetadata } from "@coinbase/onchainkit/frame";
+import type { Metadata } from "next";
+import { NEXT_PUBLIC_URL } from "./config";
 import Link from "next/link";
+const frameMetadata = getFrameMetadata({
+  buttons: [
+    {
+      label: "Story time",
+    },
+    {
+      action: "tx",
+      label: "Send Base Sepolia",
+      target: `${NEXT_PUBLIC_URL}/api/tx`,
+      postUrl: `${NEXT_PUBLIC_URL}/api/tx-success`,
+    },
+  ],
+  image: {
+    src: `${NEXT_PUBLIC_URL}/api/image?id=123`,
+    aspectRatio: "1.91:1",
+  },
+  input: {
+    text: "Tell me a story",
+  },
+  postUrl: `${NEXT_PUBLIC_URL}/api/frame`,
+});
 
-export async function generateMetadata() {
-  return {
-    title: "My Page",
-    // provide a full URL to your /frames endpoint
-    ...(await fetchMetadata(
-      new URL("/frames", process.env.VERCEL_URL || "http://localhost:3000")
-    )),
-  };
-}
+export const metadata: Metadata = {
+  title: "zizzamia.xyz",
+  description: "LFG",
+  openGraph: {
+    title: "zizzamia.xyz",
+    description: "LFG",
+    images: [`${NEXT_PUBLIC_URL}/park-1.png`],
+  },
+  other: {
+    ...frameMetadata,
+  },
+};
 
-export default function Page({ frameMetadata }: { frameMetadata: any }) {
+export default function Page() {
+  // const router = useRouter();
+
+  // const handleLogin = async () => {
+  //   try {
+  //     const response = await fetch('/api/login');
+  //     if (response.ok) {
+  //       // Redirect to the Spotify authorization page
+  //       redirect(response.url); // This assumes the response is a redirect URL
+  //     } else {
+  //       console.error('Failed to fetch');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error:', error);
+  //   }
+  // };
+
   return (
     <div>
       <h1>Login Page</h1>
       <Link href="/api/login">
         <button>Login with Spotify</button>
       </Link>
-      {/* Additional content */}
-      <script type="application/ld+json">
-        {JSON.stringify(frameMetadata)}
-      </script>
+      {/* {accessToken && (
+          <div>
+            <h2>Access Token:</h2>
+            <p>{accessToken}</p>
+          </div>
+        )}
+        {refreshToken && (
+          <div>
+            <h2>Refresh Token:</h2>
+            <p>{refreshToken}</p>
+          </div>
+        )} */}
     </div>
   );
 }
