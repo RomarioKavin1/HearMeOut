@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getCurrentlyPlaying } from "../calls/spotifyApi";
-
+import { getCurrentlyPlaying } from "../helpers/spotifyApi";
+import { usePrivy } from "@privy-io/react-auth";
+import { redirect } from "next/navigation";
 const Page = () => {
   const [code, setCode] = useState<string>("");
   const [accesstoken, setAccesstoken] = useState<string>("");
@@ -44,7 +45,12 @@ const Page = () => {
   useEffect(() => {
     console.log("accesstoken", accesstoken);
   }, [accesstoken]);
-
+  const { user, logout, authenticated } = usePrivy();
+  useEffect(() => {
+    if (!authenticated) {
+      redirect("/");
+    }
+  }, [authenticated]);
   return (
     <div>
       <h1>Welcome Home</h1>
@@ -55,6 +61,11 @@ const Page = () => {
         <br />
         <strong>Refresh Token:</strong> {refreshtoken || "Not Available"}
         <br />
+        <strong>User:</strong> {user?.farcaster?.fid || "Not Available"}
+        <br />
+        <strong>User:</strong> {user?.farcaster?.displayName || "Not Available"}
+        <br />
+        <button onClick={logout}>Logout</button>
       </p>
     </div>
   );
