@@ -7,7 +7,7 @@ const frameMetadata = getFrameMetadata({
     {
       label: "Home",
       action: "post",
-      target: `${NEXT_PUBLIC_URL}/`,
+      target: `${NEXT_PUBLIC_URL}/frame/1`,
     },
     {
       label: "My stats",

@@ -1,7 +1,6 @@
 import { getFrameMetadata } from "@coinbase/onchainkit/frame";
 import type { Metadata } from "next";
 import { NEXT_PUBLIC_URL } from "../../config";
-import Link from "next/link";
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
@@ -30,12 +29,12 @@ const frameMetadata = getFrameMetadata({
 });
 
 export const metadata: Metadata = {
-  title: "zizzamia.xyz",
+  title: "hear me out",
   description: "LFG",
   openGraph: {
-    title: "zizzamia.xyz",
+    title: "hear me out",
     description: "LFG",
-    images: [`${NEXT_PUBLIC_URL}/park-1.png`],
+    images: [`${NEXT_PUBLIC_URL}/hearmeout.png`],
   },
   other: {
     ...frameMetadata,
