@@ -1,13 +1,13 @@
 import { getFrameMetadata } from "@coinbase/onchainkit/frame";
 import type { Metadata } from "next";
-import { NEXT_PUBLIC_URL } from "./config";
+import { NEXT_PUBLIC_URL } from "../config";
 import Link from "next/link";
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: "What Am I listening to ?",
+      label: "Home",
       action: "post",
-      target: `${NEXT_PUBLIC_URL}/nowlistening`,
+      target: `${NEXT_PUBLIC_URL}/`,
     },
     {
       label: "My stats",
@@ -20,7 +20,7 @@ const frameMetadata = getFrameMetadata({
     },
   ],
   image: {
-    src: `${NEXT_PUBLIC_URL}/hearmeout.png`,
+    src: `${NEXT_PUBLIC_URL}/api/image?id=123`,
     aspectRatio: "1.91:1",
   },
   input: {
@@ -43,22 +43,6 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  // const router = useRouter();
-
-  // const handleLogin = async () => {
-  //   try {
-  //     const response = await fetch('/api/login');
-  //     if (response.ok) {
-  //       // Redirect to the Spotify authorization page
-  //       redirect(response.url); // This assumes the response is a redirect URL
-  //     } else {
-  //       console.error('Failed to fetch');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error:', error);
-  //   }
-  // };
-
   return (
     <div>
       <h1>Login Page</h1>
