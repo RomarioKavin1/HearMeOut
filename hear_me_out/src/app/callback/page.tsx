@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { redirect, useSearchParams } from "next/navigation";
 
 const CallbackPage = () => {

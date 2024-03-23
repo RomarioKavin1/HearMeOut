@@ -5,17 +5,20 @@ import Link from "next/link";
 const frameMetadata = getFrameMetadata({
   buttons: [
     {
-      label: "Story time",
+      label: "What Am I listening to ?",
     },
     {
-      action: "tx",
-      label: "Send Base Sepolia",
-      target: `${NEXT_PUBLIC_URL}/api/tx`,
-      postUrl: `${NEXT_PUBLIC_URL}/api/tx-success`,
+      label: "My stats",
+    },
+    {
+      label: "Get my playlist",
+    },
+    {
+      label: "Suggest songs",
     },
   ],
   image: {
-    src: `${NEXT_PUBLIC_URL}/api/image?id=123`,
+    src: `${NEXT_PUBLIC_URL}/hearmeout.png`,
     aspectRatio: "1.91:1",
   },
   input: {
