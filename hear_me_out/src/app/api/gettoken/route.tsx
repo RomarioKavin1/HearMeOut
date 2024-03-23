@@ -29,6 +29,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         const re = NextResponse.json({
           error: response.statusText,
         });
+        return re;
       }
 
       const data = await response.json(); // Assuming Spotify returns JSON data

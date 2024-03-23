@@ -1,74 +1,72 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getCurrentlyPlaying } from "../helpers/spotifyApi";
+import supabase from "../helpers/supaclient";
 import { usePrivy } from "@privy-io/react-auth";
 import { redirect } from "next/navigation";
-const Page = () => {
-  const [code, setCode] = useState<string>("");
-  const [accesstoken, setAccesstoken] = useState<string>("");
-  const [refreshtoken, setRefreshtoken] = useState<string>("");
-  const handleExchangeToken = async () => {
-    try {
-      const response = await fetch("/api/gettoken", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ code }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Token exchange failed: ${errorData.error}`);
-      }
-
-      const data = await response.json();
-      console.log("Token data:", data);
-      setAccesstoken(data.access_token);
-      setRefreshtoken(data.refresh_token);
-      const currently = await getCurrentlyPlaying(data.access_token);
-    } catch (error) {
-      console.error("Error exchanging token:", error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchedCode = localStorage.getItem("auth_code");
-    setCode(fetchedCode ?? "");
-  }, []);
-  useEffect(() => {
-    if (code?.length) {
-      console.log("code in home", code);
-      handleExchangeToken();
-    }
-  }, [code]);
-  useEffect(() => {
-    console.log("accesstoken", accesstoken);
-  }, [accesstoken]);
+import Link from "next/link";
+function Page() {
   const { user, logout, authenticated } = usePrivy();
+  const [loading, setLoading] = useState(true);
+  const [spotifyauth, setspotifyauth] = useState(false);
+  const fidToCheck = user?.farcaster?.fid;
+
   useEffect(() => {
     if (!authenticated) {
       redirect("/");
     }
   }, [authenticated]);
+  useEffect(() => {
+    localStorage.setItem("fid", fidToCheck?.toString() || "");
+    supabase
+      .from("profile")
+      .select("FID")
+      .eq("FID", fidToCheck)
+      .then((response) => {
+        const { data, error } = response;
+
+        if (error) {
+          console.error("Error fetching data:", error);
+          return;
+        }
+
+        // Check if the fid is found
+        if (data.length > 0) {
+          console.log(data);
+          setspotifyauth(true);
+        } else {
+          console.log(data);
+
+          setspotifyauth(false);
+        }
+      });
+    setLoading(false);
+  }, [fidToCheck, user]);
+
+  useEffect(() => {}, [loading]);
   return (
     <div>
       <h1>Welcome Home</h1>
+      <strong>User:</strong> {user?.farcaster?.fid || "Not Available"}
+      <br />
       <p>
-        <strong>Code:</strong> {code || "Not Available"}
-        <br />
-        <strong>Access Token:</strong> {accesstoken || "Not Available"}
-        <br />
-        <strong>Refresh Token:</strong> {refreshtoken || "Not Available"}
-        <br />
-        <strong>User:</strong> {user?.farcaster?.fid || "Not Available"}
-        <br />
-        <strong>User:</strong> {user?.farcaster?.displayName || "Not Available"}
-        <br />
-        <button onClick={logout}>Logout</button>
+        <strong>User:</strong> {user?.farcaster?.displayName}
       </p>
+      {loading ? (
+        <p>Loading...</p>
+      ) : spotifyauth ? (
+        <p>Spotify Authenticated</p>
+      ) : (
+        <>
+          <p>Spotify Not Authenticated</p>
+          <Link href="/api/login">
+            <button>Authenticate Spotify to generate your frame</button>
+          </Link>
+        </>
+      )}
+      <br />
+      <button onClick={logout}>Logout</button>
     </div>
   );
-};
+}
 
 export default Page;

@@ -25,5 +25,29 @@ export async function getCurrentlyPlaying(accessToken: string) {
   }
 }
 
+export async function exchangetoken(code: string): Promise<string[]> {
+  try {
+    const response = await fetch("/api/gettoken", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ code }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Token exchange failed: ${errorData.error}`);
+    }
+
+    const data = await response.json();
+    console.log("Token data:", data);
+    return [data.access_token, data.refresh_token, data.expires_in];
+  } catch (error) {
+    console.error("Error exchanging token:", error);
+    return ["error", "error", "error"];
+  }
+}
+
 // Usage example:
 // getCurrentlyPlaying('your_spotify_access_token_here');

@@ -9,14 +9,11 @@ export default function Page() {
     if (authenticated) {
       redirect("/home");
     }
-  }, [authenticated]);
-  const disableLogin = !ready || (ready && authenticated);
+  }, [authenticated, ready]);
   return (
     <div>
       <h1>Login Page</h1>
-      <button disabled={disableLogin} onClick={login}>
-        Log in with privy
-      </button>
+      <button onClick={login}>Log in with privy</button>
     </div>
   );
 }

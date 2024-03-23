@@ -9,8 +9,7 @@ const CallbackPage = () => {
   useEffect(() => {
     if (code) {
       localStorage.setItem("auth_code", code);
-
-      redirect("/home");
+      redirect("/getaccess");
     }
   }, [code]);
 
