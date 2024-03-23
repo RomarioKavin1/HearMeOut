@@ -31,11 +31,8 @@ function Page() {
 
         // Check if the fid is found
         if (data.length > 0) {
-          console.log(data);
           setspotifyauth(true);
         } else {
-          console.log(data);
-
           setspotifyauth(false);
         }
       });

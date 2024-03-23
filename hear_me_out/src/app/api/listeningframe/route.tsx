@@ -24,9 +24,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         return NextResponse.json(d);
       }
       currentdata = await dat.json();
-      console.log("currentdata", currentdata);
     } catch (e) {
-      console.log("error heree");
+      console.log(e);
     }
     let pollSvg;
     pollSvg = await satori(

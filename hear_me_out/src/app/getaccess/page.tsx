@@ -31,16 +31,12 @@ const CallbackPage = () => {
   }, [code]);
   useEffect(() => {
     if (accesstoken && refreshtoken && expiresin && fid) {
-      console.log("Supabase Ready at", accesstoken);
-      console.log("Supabase Ready rt", refreshtoken);
-      console.log("Supabase Ready ei", expiresin);
       const entry = {
         FID: Number(fid),
         accesstoken: accesstoken,
         refreshtoken: refreshtoken,
         expires_in: Number(expiresin),
       };
-      console.log("supabase entry", entry);
       supabase
         .from("profile")
         .insert([entry])
@@ -51,7 +47,6 @@ const CallbackPage = () => {
             console.error("Error inserting data:", error);
             return;
           } else {
-            console.log("Successfully inserted:", data);
             setAuth(true);
           }
         });

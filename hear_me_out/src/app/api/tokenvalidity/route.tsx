@@ -22,13 +22,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return resp;
     } else {
       const { created_at, refreshtoken, accesstoken } = dt;
-      console.log("fid data", refreshtoken);
       const createdAtDate = new Date(created_at);
       const createdAtTimestamp = createdAtDate.getTime();
       const nowTimestamp = new Date().getTime();
       const differenceInHours =
         (nowTimestamp - createdAtTimestamp) / (1000 * 60 * 60);
-      console.log("diff", differenceInHours);
       if (differenceInHours > 1) {
         const headers = {
           "Content-Type": "application/x-www-form-urlencoded",

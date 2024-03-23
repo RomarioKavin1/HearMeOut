@@ -23,7 +23,6 @@ const Page = () => {
       }
 
       const data = await response.json();
-      console.log("Token data:", data);
       setAccesstoken(data.access_token);
       setRefreshtoken(data.refresh_token);
       const currently = await getCurrentlyPlaying(data.access_token);
@@ -38,13 +37,10 @@ const Page = () => {
   }, []);
   useEffect(() => {
     if (code?.length) {
-      console.log("code in home", code);
       handleExchangeToken();
     }
   }, [code]);
-  useEffect(() => {
-    console.log("accesstoken", accesstoken);
-  }, [accesstoken]);
+  useEffect(() => {}, [accesstoken]);
   const { user, logout, authenticated } = usePrivy();
   useEffect(() => {
     if (!authenticated) {
