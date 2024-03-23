@@ -4,13 +4,14 @@ import { redirect } from "next/navigation";
 import { exchangetoken } from "../helpers/spotifyApi";
 import supabase from "../helpers/supaclient";
 import { usePrivy } from "@privy-io/react-auth";
+import Link from "next/link";
 const CallbackPage = () => {
   const [code, setCode] = useState<string>("");
   const [accesstoken, setAccesstoken] = useState<string>();
   const [refreshtoken, setRefreshtoken] = useState<string>();
   const [expiresin, setExpiresin] = useState<string>();
   const [fid, setFid] = useState<string>();
-  const { user, ready } = usePrivy();
+  const [auth, setAuth] = useState<boolean>(false);
   useEffect(() => {
     const fetchedCode = localStorage.getItem("auth_code");
     const fid = localStorage.getItem("fid");
@@ -49,28 +50,24 @@ const CallbackPage = () => {
           if (error) {
             console.error("Error inserting data:", error);
             return;
+          } else {
+            console.log("Successfully inserted:", data);
+            setAuth(true);
           }
-
-          console.log("Successfully inserted:", data);
         });
     }
   }, [accesstoken, refreshtoken, expiresin, fid]);
   return (
     <>
-      <div>Fetching tokens...</div>
-      <br />
-      <div>
-        <strong>Code:</strong> {code || "Not Available"}
-        <br />
-        <strong>Access Token:</strong>
-        {accesstoken || "Not Available"}
-        <br />
-        <strong>Refresh Token:</strong>
-        {refreshtoken || "Not Available"}
-        <br />
-        <strong>Expires In:</strong>
-        {expiresin || "Not Available"}
-      </div>
+      {!auth ? (
+        <div>Fetching tokens...</div>
+      ) : (
+        <>
+          <Link href="/home">
+            <button>Get your frame link</button>
+          </Link>
+        </>
+      )}
     </>
   );
 };
