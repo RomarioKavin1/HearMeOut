@@ -3,213 +3,156 @@ import satori from "satori";
 import sharp from "sharp";
 import { join } from "path";
 import * as fs from "fs";
+import { NEXT_PUBLIC_URL } from "@/app/config";
+
+const fetchRecentlyPlayed = async (fid: string) => {
+  const response = await fetch(
+    `http://localhost:3000/api/recentlyPlayed?fid=${fid}`,
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+  if (!response.ok) throw new Error("Failed to fetch recently played tracks");
+  return response.json();
+};
+
+const truncateText = (text: string, maxLength = 60) =>
+  text.length > maxLength ? `${text.substring(0, maxLength - 3)}...` : text;
+
 export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
     const fontFilePath = join(process.cwd(), "public", "Lato-Regular.ttf");
     const fontData = fs.readFileSync(fontFilePath);
     const fid = req.nextUrl.searchParams.get("fid");
-    let currentdata;
-    try {
-      const dat = await fetch(
-        `http://localhost:3000/api/currentlyListening?fid=${fid}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!dat.ok) {
-        const d = await dat.json();
-        return NextResponse.json(d);
-      }
-      currentdata = await dat.json();
-    } catch (e) {
-      console.log(e);
-    }
-    let pollSvg;
-    pollSvg = await satori(
+
+    const [currentdataResponse, recentlyPlayed] = await Promise.all([
+      fetch(
+        `http://localhost:3000/api/currentlyListening?fid=${fid ?? ""}`
+      ).then((res) => res.json()),
+      fetchRecentlyPlayed(fid ?? ""),
+    ]);
+
+    // Handling empty response for current data
+    const currentdata =
+      currentdataResponse && Object.keys(currentdataResponse).length > 0
+        ? currentdataResponse
+        : {
+            song: "Not listening to music",
+            artist: "N/A",
+            albumCover: `${NEXT_PUBLIC_URL}/hearmeout.png`, // Provide a path to a default image
+          };
+    const svgContent = (
       <div
         style={{
           display: "flex",
+          flexDirection: "column",
+          backgroundColor: "#2CAE77",
+          padding: "20px",
+          fontFamily: "Lato",
+          fontSize: "14px",
           width: "100%",
           height: "100%",
-          backgroundColor: "#F7F7F7",
-          fontSize: 24,
-          justifyItems: "center",
           alignItems: "center",
-          justifyContent: "center",
         }}
       >
+        {/* Currently Playing Section */}
+        <h1>Now playing</h1>
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            width: "300px",
-            height: "80px",
             backgroundColor: "#282828",
-            borderRadius: "8px",
-            padding: "8px",
-            boxSizing: "border-box",
+            borderRadius: "4px",
+            padding: "10px",
+            marginBottom: "20px",
+            width: "90%",
           }}
-          className="audio-player"
         >
-          <div
+          <img
+            src={currentdata.albumCover}
+            alt="Album cover"
             style={{
-              display: "flex",
-              flexDirection: "column",
               width: "64px",
               height: "64px",
-              backgroundColor: "#fff",
               borderRadius: "50%",
               marginRight: "12px",
             }}
-            className="album-cover"
-          >
-            <img
-              src={currentdata.albumCover}
-              alt="Album cover"
-              style={{ width: "100%", height: "100%", borderRadius: "50%" }}
-            />
-          </div>
-          <div
-            style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}
-            className="player-controls"
-          >
-            <div
-              style={{
-                marginBottom: "4px",
-                display: "flex",
-                flexDirection: "column",
-              }}
-              className="song-info"
-            >
-              <div
-                style={{
-                  fontSize: "16px",
-                  color: "#fff",
-                  margin: "0",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-                className="song-title"
-              >
-                {currentdata.song}
-              </div>
-              <p
-                style={{ fontSize: "12px", color: "#b3b3b3", margin: "0" }}
-                className="artist"
-              >
-                {currentdata.artist}
-              </p>
+          />
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ color: "#fff", marginBottom: "4px" }}>
+              {truncateText(currentdata.song)}
             </div>
-            <div
-              style={{
-                width: "100%",
-                height: "4px",
-                backgroundColor: "#4f4f4f",
-                borderRadius: "2px",
-                overflow: "hidden",
-                display: "flex",
-                flexDirection: "column",
-              }}
-              className="progress-bar"
-            >
-              <div
-                style={{
-                  width: "50%",
-                  height: "100%",
-                  backgroundColor: "#1db954",
-                  transformOrigin: "left",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-                className="progress"
-              ></div>
-            </div>
-            <div style={{ display: "flex" }} className="buttons">
-              <div
-                style={{
-                  fontSize: "16px",
-                  color: "#fff",
-                  marginRight: "8px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-                className="play-btn"
-              >
-                <svg
-                  viewBox="0 0 16 16"
-                  className="bi bi-play-fill"
-                  fill="currentColor"
-                  height="16"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ color: "white" }}
-                >
-                  <path
-                    fill="white"
-                    d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                  ></path>
-                </svg>
-              </div>
-              <div
-                style={{
-                  fontSize: "16px",
-                  color: "#fff",
-                  marginRight: "8px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-                className="pause-btn"
-              >
-                <svg
-                  viewBox="0 0 16 16"
-                  className="bi bi-pause-fill"
-                  fill="currentColor"
-                  height="16"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ color: "white" }}
-                >
-                  <path
-                    fill="white"
-                    d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"
-                  ></path>
-                </svg>
-              </div>
+            <div style={{ color: "#b3b3b3", fontSize: "12px" }}>
+              {truncateText(currentdata.artist)}
             </div>
           </div>
         </div>
-      </div>,
 
-      {
-        width: 600,
-        height: 400,
-        fonts: [
-          {
-            data: fontData,
-            name: "Lato-Regular",
-            style: "normal",
-            weight: 400,
-          },
-        ],
-      }
+        {/* Recently Played Section */}
+        <div style={{ display: "flex", flexDirection: "column", width: "90%" }}>
+          <h2 style={{ color: "#282828", marginBottom: "10px" }}>
+            Recently Played
+          </h2>
+          {recentlyPlayed.map(
+            (
+              {
+                songName,
+                artist,
+                image,
+              }: { songName: string; artist: string; image: string },
+              index: number
+            ) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "10px",
+                }}
+              >
+                <img
+                  src={image}
+                  alt="Track"
+                  style={{
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "50%",
+                    marginRight: "8px",
+                  }}
+                />
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <div style={{ color: "#282828", fontSize: "14px" }}>
+                    {truncateText(songName)}
+                  </div>
+                  <div style={{ color: "#707070", fontSize: "12px" }}>
+                    {truncateText(artist)}
+                  </div>
+                </div>
+              </div>
+            )
+          )}
+        </div>
+      </div>
     );
-    const pngBuffer = await sharp(Buffer.from(pollSvg))
+
+    const svgImage = await satori(svgContent, {
+      width: 955,
+      height: 500,
+      fonts: [
+        { data: fontData, name: "Lato-Regular", style: "normal", weight: 400 },
+      ],
+    });
+
+    const pngBuffer = await sharp(Buffer.from(svgImage))
       .toFormat("png")
       .toBuffer();
+
     return new NextResponse(pngBuffer, {
-      headers: {
-        "Content-Type": "image/png",
-        "Cache-Control": "max-age=10",
-      },
+      headers: { "Content-Type": "image/png", "Cache-Control": "max-age=10" },
       status: 200,
     });
   } catch (error) {
-    console.log("ERROR IN FRAMES IMAGE API:");
-    console.log(error);
+    console.error("ERROR IN FRAMES IMAGE API:", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

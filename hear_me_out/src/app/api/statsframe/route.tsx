@@ -168,7 +168,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         fonts: [
           {
             data: fontData,
-            name: "Lato",
+            name: "Lato-Regular",
             style: "normal",
             weight: 400,
           },

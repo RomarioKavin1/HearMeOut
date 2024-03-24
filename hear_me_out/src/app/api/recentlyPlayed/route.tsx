@@ -11,7 +11,7 @@ type Track = {
 const fetchRecentlyPlayedTracks = async (
   accessToken: string
 ): Promise<Track[]> => {
-  const url = "https://api.spotify.com/v1/me/player/recently-played?limit=5";
+  const url = "https://api.spotify.com/v1/me/player/recently-played?limit=3";
   const headers = {
     Authorization: `Bearer ${accessToken}`,
   };

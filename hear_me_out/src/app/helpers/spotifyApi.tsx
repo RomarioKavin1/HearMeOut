@@ -9,18 +9,22 @@ export async function getCurrentlyPlaying(accessToken: string) {
       },
     });
 
-    if (!response.ok) {
-      // Handle the error case where the Spotify API returns a non-2xx HTTP status
-      const errorDetail = await response.text();
-      throw new Error(
-        `Failed to fetch currently playing track: ${errorDetail}`
+    // Check if the response is ok and has content
+    if (response.ok && response.status !== 204) {
+      const data = await response.json(); // Assuming the response is JSON-formatted
+      return data; // Return the data for further processing
+    } else {
+      // Handle no content or other non-success responses
+      console.log(
+        `No currently playing track or unexpected response status: ${response.status}`
       );
+      // Return a default object or null to indicate no data
+      return null;
     }
-
-    const data = await response.json(); // Assuming the response is JSON-formatted
-    return data; // Return the data for further processing
   } catch (error) {
     console.error("Error fetching currently playing track:", error);
+    // Return null or default object to indicate an error/failure
+    return null;
   }
 }
 
