@@ -1,9 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
 import { exchangetoken } from "../helpers/spotifyApi";
 import supabase from "../helpers/supaclient";
-import { usePrivy } from "@privy-io/react-auth";
 import Link from "next/link";
 const CallbackPage = () => {
   const [code, setCode] = useState<string>("");
@@ -55,12 +53,33 @@ const CallbackPage = () => {
   return (
     <>
       {!auth ? (
-        <div>Fetching tokens...</div>
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-300 to-green-600">
+          <div className="loader ease-linear rounded-full border-8 border-t-8 border-green-900 h-24 w-24"></div>
+          <style jsx>{`
+            .loader {
+              border-top-color: #ffffff;
+              animation: spin 1s infinite linear;
+            }
+            @keyframes spin {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(360deg);
+              }
+            }
+          `}</style>
+        </div>
       ) : (
         <>
-          <Link href="/home">
-            <button>Get your frame link</button>
-          </Link>
+          <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-300 to-green-600 flex-col">
+            <h1>Authentication Success!</h1>
+            <Link href="/home">
+              <button className="bg-green-800 hover:bg-green-900 text-white font-bold py-2 px-4 rounded">
+                Get your Frame
+              </button>
+            </Link>
+          </div>
         </>
       )}
     </>

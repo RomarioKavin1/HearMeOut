@@ -7,7 +7,7 @@ import { NEXT_PUBLIC_URL } from "@/app/config";
 
 const fetchRecentlyPlayed = async (fid: string) => {
   const response = await fetch(
-    `http://localhost:3000/api/recentlyPlayed?fid=${fid}`,
+    `${NEXT_PUBLIC_URL}/api/recentlyPlayed?fid=${fid}`,
     {
       headers: { "Content-Type": "application/json" },
     }
@@ -26,9 +26,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const fid = req.nextUrl.searchParams.get("fid");
 
     const [currentdataResponse, recentlyPlayed] = await Promise.all([
-      fetch(
-        `http://localhost:3000/api/currentlyListening?fid=${fid ?? ""}`
-      ).then((res) => res.json()),
+      fetch(`${NEXT_PUBLIC_URL}/api/currentlyListening?fid=${fid ?? ""}`).then(
+        (res) => res.json()
+      ),
       fetchRecentlyPlayed(fid ?? ""),
     ]);
 

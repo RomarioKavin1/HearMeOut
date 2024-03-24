@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchSpotifyUserData } from "@/app/helpers/spotifyApi"; // Make sure to implement this function
+import { NEXT_PUBLIC_URL } from "@/app/config";
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   if (req.method === "GET") {
     const fid = req.nextUrl.searchParams.get("fid");
-    const response = await fetch("http://localhost:3000/api/tokenvalidity", {
+    const response = await fetch(`${NEXT_PUBLIC_URL}/api/tokenvalidity`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

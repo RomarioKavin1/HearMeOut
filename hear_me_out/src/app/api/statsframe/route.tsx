@@ -12,6 +12,7 @@ import satori from "satori";
 import sharp from "sharp";
 import * as fs from "fs";
 import { NextRequest, NextResponse } from "next/server";
+import { NEXT_PUBLIC_URL } from "@/app/config";
 
 export async function GET(req: NextRequest, res: NextResponse) {
   const truncateText = (text: string, maxLength: number = 15) => {
@@ -24,10 +25,10 @@ export async function GET(req: NextRequest, res: NextResponse) {
     const fontData = fs.readFileSync(fontFilePath);
     const fid = req.nextUrl.searchParams.get("fid");
     const artistResponse = await fetch(
-      `http://localhost:3000/api/topartist?fid=${fid}`
+      `${NEXT_PUBLIC_URL}/api/topartist?fid=${fid}`
     );
     const trackResponse = await fetch(
-      `http://localhost:3000/api/toptracks?fid=${fid}`
+      `${NEXT_PUBLIC_URL}/api/toptracks?fid=${fid}`
     );
 
     if (!artistResponse.ok || !trackResponse.ok) {

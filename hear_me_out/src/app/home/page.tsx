@@ -67,12 +67,12 @@ function Page() {
       </Head>
 
       {/* Logo */}
-      <div className="mb-10">
+      <div>
         <Image src="/transparent.png" alt="Logo" width={240} height={240} />
       </div>
 
       {/* Farcaster Account Card */}
-      <div className="bg-green-700 p-5 rounded-lg shadow-lg mb-4 flex flex-col items-center space-y-4">
+      <div className="bg-green-700 p-5 rounded-lg shadow-lg mb-2 flex flex-col items-center space-y-2">
         <h1 className="text-xl font-bold">Logged in with Farcaster</h1>
         {user?.farcaster?.pfp && (
           <Image
@@ -112,14 +112,15 @@ function Page() {
                 </h1>
                 <p>
                   <strong>Name:</strong>{" "}
-                  {spotifyAccount?.displayName || "Not Available"}
+                  {(spotifyAccount as any)?.displayName || "Not Available"}
                 </p>
                 <p>
-                  <strong>Followers:</strong> {spotifyAccount?.followers || 0}
+                  <strong>Followers:</strong>{" "}
+                  {(spotifyAccount as any)?.followers || 0}
                 </p>
                 <p>
-                  <strong>Your Frame:</strong>
-                  <br /> {`${NEXT_PUBLIC_URL}/frame/${fidToCheck}`}
+                  <strong>Your Frame: </strong>
+                  {`${NEXT_PUBLIC_URL}/frame/${fidToCheck}`}
                 </p>
               </div>
               <button
