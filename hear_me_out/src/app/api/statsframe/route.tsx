@@ -96,37 +96,42 @@ export async function GET(req: NextRequest, res: NextResponse) {
             >
               Top Artists
             </h2>
-            {artistsData.map((artist, index) => (
-              <div
-                key={index}
-                style={{
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: "10px",
-                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  padding: "10px",
-                  gap: "5px",
-                  width: "180px",
-                  textAlign: "center",
-                }}
-              >
-                <img
-                  src={artist.artistImage}
-                  alt="Artist"
+            {artistsData.map(
+              (
+                artist: { artistImage: string | undefined; artistName: string },
+                index: Key | null | undefined
+              ) => (
+                <div
+                  key={index}
                   style={{
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: "10px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    padding: "10px",
+                    gap: "5px",
+                    width: "180px",
+                    textAlign: "center",
                   }}
-                />
-                <span style={{ fontSize: "14px", color: "#333" }}>
-                  {truncateText(artist.artistName, 20)}
-                </span>
-              </div>
-            ))}
+                >
+                  <img
+                    src={artist.artistImage}
+                    alt="Artist"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <span style={{ fontSize: "14px", color: "#333" }}>
+                    {truncateText(artist.artistName, 20)}
+                  </span>
+                </div>
+              )
+            )}
           </div>
 
           {/* Tracks Section */}
@@ -148,47 +153,56 @@ export async function GET(req: NextRequest, res: NextResponse) {
             >
               Top Tracks
             </h2>
-            {tracksData.map((track, index) => (
-              <div
-                key={index}
-                style={{
-                  backgroundColor: "#FFFFFF",
-                  borderRadius: "10px",
-                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  padding: "10px",
-                  gap: "5px",
-                  width: "180px",
-                  textAlign: "center",
-                }}
-              >
-                <img
-                  src={track.image}
-                  alt="Track"
+            {tracksData.map(
+              (
+                track: {
+                  image: string | undefined;
+                  songName: string;
+                  artist: string;
+                },
+                index: Key | null | undefined
+              ) => (
+                <div
+                  key={index}
                   style={{
-                    width: "100px",
-                    height: "100px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                  }}
-                />
-                <span
-                  style={{
-                    fontSize: "14px",
-                    color: "#333",
+                    backgroundColor: "#FFFFFF",
+                    borderRadius: "10px",
+                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    padding: "10px",
+                    gap: "5px",
+                    width: "180px",
+                    textAlign: "center",
                   }}
                 >
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    {truncateText(track.songName, 20)} <br />
-                    <small style={{ fontSize: "12px", color: "#666" }}>
-                      by {truncateText(track.artist, 20)}
-                    </small>
-                  </div>
-                </span>
-              </div>
-            ))}
+                  <img
+                    src={track.image}
+                    alt="Track"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: "14px",
+                      color: "#333",
+                    }}
+                  >
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      {truncateText(track.songName, 20)} <br />
+                      <small style={{ fontSize: "12px", color: "#666" }}>
+                        by {truncateText(track.artist, 20)}
+                      </small>
+                    </div>
+                  </span>
+                </div>
+              )
+            )}
           </div>
         </div>
       </div>,
