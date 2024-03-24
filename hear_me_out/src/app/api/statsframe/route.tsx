@@ -20,7 +20,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
   };
 
   try {
-    const fontFilePath = join(process.cwd(), "public", "Lato-Regular.ttf");
+    const fontFilePath = join(process.cwd(), "public", "Poppins-Regular.ttf");
     const fontData = fs.readFileSync(fontFilePath);
     const fid = req.nextUrl.searchParams.get("fid");
     const artistResponse = await fetch(
@@ -168,7 +168,7 @@ export async function GET(req: NextRequest, res: NextResponse) {
         fonts: [
           {
             data: fontData,
-            name: "Lato-Regular",
+            name: "Poppins-Regular",
             style: "normal",
             weight: 400,
           },

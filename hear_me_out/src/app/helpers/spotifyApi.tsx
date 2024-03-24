@@ -57,7 +57,25 @@ interface SpotifyArtist {
   genres: string[];
   // Add more properties as needed
 }
+export async function fetchSpotifyUserData(accessToken: string) {
+  try {
+    const response = await fetch("https://api.spotify.com/v1/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
+    if (!response.ok) {
+      throw new Error(`Spotify API error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching Spotify user data:", error);
+    return null; // Return null in case of an error
+  }
+}
 async function getTopArtists(
   accessToken: string,
   timeRange: string = "medium_term",

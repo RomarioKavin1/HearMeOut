@@ -21,7 +21,7 @@ const truncateText = (text: string, maxLength = 60) =>
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
-    const fontFilePath = join(process.cwd(), "public", "Lato-Regular.ttf");
+    const fontFilePath = join(process.cwd(), "public", "Poppins-Regular.ttf");
     const fontData = fs.readFileSync(fontFilePath);
     const fid = req.nextUrl.searchParams.get("fid");
 
@@ -139,7 +139,12 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       width: 955,
       height: 500,
       fonts: [
-        { data: fontData, name: "Lato-Regular", style: "normal", weight: 400 },
+        {
+          data: fontData,
+          name: "Poppins-Regular",
+          style: "normal",
+          weight: 400,
+        },
       ],
     });
 
