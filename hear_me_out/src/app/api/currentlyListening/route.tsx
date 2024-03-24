@@ -31,8 +31,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     } else {
       // Return a default response indicating nothing is currently being played
       return NextResponse.json({
-        artist: "N/A",
-        song: "Nothing is currently playing",
+        artist: "",
+        song: "Nothing is currently being played",
         albumCover: `${NEXT_PUBLIC_URL}/hearmeout.png`, // Provide a path to a default image if necessary
       });
     }

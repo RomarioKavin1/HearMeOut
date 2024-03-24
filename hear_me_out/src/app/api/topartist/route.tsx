@@ -7,7 +7,7 @@ type Artist = {
 };
 
 const fetchTopArtists = async (accessToken: string): Promise<Artist[]> => {
-  const url = "https://api.spotify.com/v1/me/top/artists?limit=5";
+  const url = "https://api.spotify.com/v1/me/top/artists?limit=3";
   const headers = {
     Authorization: `Bearer ${accessToken}`,
   };

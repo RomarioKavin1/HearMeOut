@@ -5,20 +5,19 @@ export default function Page({ params }: { params: { slug: string } }) {
     <div>
       <head>
         <meta name="fc:frame" content="vNext" />
-        <meta name="fc:frame:button:1" content="Home" />
+        <meta name="fc:frame:button:1" content="Now Listening" />
         <meta name="fc:frame:button:1:action" content="post" />
         <meta
           name="fc:frame:button:1:target"
-          content={`${NEXT_PUBLIC_URL}/frame/${params.slug}`}
+          content={`${NEXT_PUBLIC_URL}/nowlistening/${params.slug}`}
         />
-        <meta name="fc:frame:button:2" content="What Am I listening to ?" />
+        <meta name="fc:frame:button:2" content="Home" />
         <meta name="fc:frame:button:2:action" content="post" />
         <meta
           name="fc:frame:button:2:target"
-          content={`${NEXT_PUBLIC_URL}/nowlistening/${params.slug}`}
+          content={`${NEXT_PUBLIC_URL}/frame/${params.slug}`}
         />
         <meta name="fc:frame:button:3" content="Get my playlist" />
-        <meta name="fc:frame:button:4" content="Suggest songs" />
         <meta
           name="fc:frame:image"
           content={`${NEXT_PUBLIC_URL}/api/statsframe?fid=${params.slug}`}

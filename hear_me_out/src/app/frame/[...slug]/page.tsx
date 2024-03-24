@@ -4,7 +4,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     <div>
       <head>
         <meta name="fc:frame" content="vNext" />
-        <meta name="fc:frame:button:1" content="What Am I listening to ?" />
+        <meta name="fc:frame:button:1" content="Now Listening" />
         <meta name="fc:frame:button:1:action" content="post" />
         <meta
           name="fc:frame:button:1:target"
@@ -17,7 +17,6 @@ export default function Page({ params }: { params: { slug: string } }) {
           content={`${NEXT_PUBLIC_URL}/stats/${params.slug}`}
         />
         <meta name="fc:frame:button:3" content="Get my playlist" />
-        <meta name="fc:frame:button:4" content="Suggest songs" />
         <meta
           name="fc:frame:image"
           content={`${NEXT_PUBLIC_URL}/hearmeout.png`}

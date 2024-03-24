@@ -11,14 +11,13 @@ export default function Page({ params }: { params: { slug: string } }) {
           name="fc:frame:button:1:target"
           content={`${NEXT_PUBLIC_URL}/frame/${params.slug}`}
         />
-        <meta name="fc:frame:button:2" content="My stats" />
+        <meta name="fc:frame:button:2" content="Stats" />
         <meta name="fc:frame:button:2:action" content="post" />
         <meta
           name="fc:frame:button:2:target"
-          content={`${NEXT_PUBLIC_URL}/frame/${params.slug}`}
+          content={`${NEXT_PUBLIC_URL}/stats/${params.slug}`}
         />
         <meta name="fc:frame:button:3" content="Get my playlist" />
-        <meta name="fc:frame:button:4" content="Suggest songs" />
         <meta
           name="fc:frame:image"
           content={`${NEXT_PUBLIC_URL}/api/listeningframe?fid=${params.slug}`}

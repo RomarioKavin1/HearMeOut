@@ -8,7 +8,7 @@ type Track = {
 };
 
 const fetchTopTracks = async (accessToken: string): Promise<Track[]> => {
-  const url = "https://api.spotify.com/v1/me/top/tracks?limit=5";
+  const url = "https://api.spotify.com/v1/me/top/tracks?limit=3";
   const headers = {
     Authorization: `Bearer ${accessToken}`,
   };

@@ -4,6 +4,7 @@ import sharp from "sharp";
 import { join } from "path";
 import * as fs from "fs";
 import { NEXT_PUBLIC_URL } from "@/app/config";
+import { Key } from "react";
 
 const fetchRecentlyPlayed = async (fid: string) => {
   const response = await fetch(
@@ -38,7 +39,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         ? currentdataResponse
         : {
             song: "Not listening to music",
-            artist: "N/A",
+            artist: "",
             albumCover: `${NEXT_PUBLIC_URL}/hearmeout.png`, // Provide a path to a default image
           };
     const svgContent = (
@@ -46,25 +47,33 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         style={{
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#2CAE77",
+          background: "linear-gradient(145deg, #1E9C76, #2CAE77)",
           padding: "20px",
-          fontFamily: "Lato",
+          fontFamily: "'Lato', sans-serif",
           fontSize: "14px",
+          color: "#FFFFFF",
           width: "100%",
           height: "100%",
           alignItems: "center",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+          borderRadius: "10px",
         }}
       >
         {/* Currently Playing Section */}
-        <h1>Now playing</h1>
+        <h1
+          style={{ fontSize: "20px", fontWeight: "bold", margin: "0 0 15px 0" }}
+        >
+          Now Playing
+        </h1>
+        {/* Enhanced Currently Playing Section */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
             backgroundColor: "#282828",
-            borderRadius: "4px",
-            padding: "10px",
-            marginBottom: "20px",
+            borderRadius: "8px",
+            padding: "20px",
+            marginBottom: "40px",
             width: "90%",
           }}
         >
@@ -72,27 +81,66 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             src={currentdata.albumCover}
             alt="Album cover"
             style={{
-              width: "64px",
-              height: "64px",
+              width: "120px",
+              height: "120px",
               borderRadius: "50%",
-              marginRight: "12px",
+              marginRight: "20px",
             }}
           />
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ color: "#fff", marginBottom: "4px" }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                color: "#fff",
+                marginBottom: "8px",
+                fontSize: "20px",
+                fontWeight: "bold",
+              }}
+            >
               {truncateText(currentdata.song)}
             </div>
-            <div style={{ color: "#b3b3b3", fontSize: "12px" }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                color: "#b3b3b3",
+                fontSize: "16px",
+              }}
+            >
               {truncateText(currentdata.artist)}
             </div>
           </div>
         </div>
-
-        {/* Recently Played Section */}
-        <div style={{ display: "flex", flexDirection: "column", width: "90%" }}>
-          <h2 style={{ color: "#282828", marginBottom: "10px" }}>
-            Recently Played
-          </h2>
+        <h2
+          style={{
+            flexGrow: 0,
+            flexShrink: 0,
+            fontSize: "18px",
+            fontWeight: "bold",
+            color: "#FFFFFF",
+            marginRight: "20px",
+          }}
+        >
+          Recently Played
+        </h2>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexWrap: "nowrap",
+            overflowX: "auto",
+            backgroundColor: "#282828",
+            backdropFilter: "blur(10px)",
+            borderRadius: "15px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            padding: "20px",
+            width: "90%",
+          }}
+        >
           {recentlyPlayed.map(
             (
               {
@@ -100,32 +148,57 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
                 artist,
                 image,
               }: { songName: string; artist: string; image: string },
-              index: number
+              index: Key | null | undefined
             ) => (
               <div
                 key={index}
                 style={{
                   display: "flex",
+                  flexDirection: "column",
                   alignItems: "center",
-                  marginBottom: "10px",
+                  marginRight: "15px",
+                  flexGrow: 0,
+                  flexShrink: 0,
                 }}
               >
                 <img
                   src={image}
                   alt="Track"
                   style={{
-                    width: "32px",
-                    height: "32px",
+                    width: "80px",
+                    height: "80px",
                     borderRadius: "50%",
-                    marginRight: "8px",
+                    marginBottom: "10px",
+                    border: "2px solid #FFFFFF",
                   }}
                 />
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <div style={{ color: "#282828", fontSize: "14px" }}>
-                    {truncateText(songName)}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    textAlign: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      color: "#EFEFEF",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                    }}
+                  >
+                    {truncateText(songName, 20)}
                   </div>
-                  <div style={{ color: "#707070", fontSize: "12px" }}>
-                    {truncateText(artist)}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      color: "#B2B2B2",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {truncateText(artist, 20)}
                   </div>
                 </div>
               </div>
