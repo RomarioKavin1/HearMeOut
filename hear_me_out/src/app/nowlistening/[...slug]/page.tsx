@@ -9,9 +9,14 @@ export default function Page({ params }: { params: { slug: string } }) {
         <meta name="fc:frame:button:1:action" content="post" />
         <meta
           name="fc:frame:button:1:target"
-          content={`${NEXT_PUBLIC_URL}/frame/1`}
+          content={`${NEXT_PUBLIC_URL}/frame/${params.slug}`}
         />
         <meta name="fc:frame:button:2" content="My stats" />
+        <meta name="fc:frame:button:2:action" content="post" />
+        <meta
+          name="fc:frame:button:2:target"
+          content={`${NEXT_PUBLIC_URL}/frame/${params.slug}`}
+        />
         <meta name="fc:frame:button:3" content="Get my playlist" />
         <meta name="fc:frame:button:4" content="Suggest songs" />
         <meta
@@ -19,7 +24,6 @@ export default function Page({ params }: { params: { slug: string } }) {
           content={`${NEXT_PUBLIC_URL}/api/listeningframe?fid=${params.slug}`}
         />
         <meta name="fc:frame:image:aspect_ratio" content="1.91:1" />
-        <meta name="fc:frame:input:text" content="Tell me a story" />
         <meta
           name="fc:frame:post_url"
           content={`${NEXT_PUBLIC_URL}/api/frame`}
