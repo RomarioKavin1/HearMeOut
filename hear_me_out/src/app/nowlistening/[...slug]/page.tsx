@@ -1,39 +1,76 @@
-import { NEXT_PUBLIC_URL } from "../../config"; // Assuming your config exports this variable
+import {
+  FrameButton,
+  FrameContainer,
+  FrameImage,
+  FrameReducer,
+  getPreviousFrame,
+  useFramesReducer,
+} from "frames.js/next/server";
+import { NEXT_PUBLIC_URL } from "../../config";
+import { ClientProtocolId } from "frames.js";
 
-export default function Page({ params }: { params: { slug: string } }) {
+type State = {
+  lastClicked: string;
+};
+
+const initialState: State = { lastClicked: "" };
+
+const reducer: FrameReducer<State> = (state, action) => {
+  const buttonIndex = action.postBody?.untrustedData.buttonIndex;
+  switch (buttonIndex) {
+    case 1:
+      return { ...state, lastClicked: "Home" };
+    case 2:
+      return { ...state, lastClicked: "Stats" };
+    case 3:
+      return { ...state, lastClicked: "Get my playlist" };
+    default:
+      return state;
+  }
+};
+const acceptedProtocols: ClientProtocolId[] = [
+  {
+    id: "xmtp",
+    version: "vNext",
+  },
+  {
+    id: "farcaster",
+    version: "vNext",
+  },
+];
+export default async function FramePage({
+  searchParams,
+  params,
+}: {
+  searchParams: Record<string, string>;
+  params: { slug: string };
+}) {
+  const previousFrame = getPreviousFrame<State>(searchParams);
+  const [state] = useFramesReducer<State>(reducer, initialState, previousFrame);
+
   return (
-    <div>
-      <head>
-        <meta name="fc:frame" content="vNext" />
-        <meta name="fc:frame:button:1" content="Home" />
-        <meta name="fc:frame:button:1:action" content="post" />
-        <meta
-          name="fc:frame:button:1:target"
-          content={`${NEXT_PUBLIC_URL}/frame/${params.slug}`}
-        />
-        <meta name="fc:frame:button:2" content="Stats" />
-        <meta name="fc:frame:button:2:action" content="post" />
-        <meta
-          name="fc:frame:button:2:target"
-          content={`${NEXT_PUBLIC_URL}/stats/${params.slug}`}
-        />
-        <meta name="fc:frame:button:3" content="Get my playlist" />
-        <meta
-          name="fc:frame:image"
-          content={`${NEXT_PUBLIC_URL}/api/listeningframe?fid=${params.slug}`}
-        />
-        <meta name="fc:frame:image:aspect_ratio" content="1.91:1" />
-        <meta
-          name="fc:frame:post_url"
-          content={`${NEXT_PUBLIC_URL}/api/frame`}
-        />
-        <title>zizzamia.xyz</title>
-        <meta name="description" content="LFG" />
-        <meta property="og:title" content="zizzamia.xyz" />
-        <meta property="og:description" content="LFG" />
-        <meta property="og:image" content={`${NEXT_PUBLIC_URL}/park-1.png`} />
-      </head>
-      <h1>frame</h1>
-    </div>
+    <FrameContainer
+      postUrl={`${NEXT_PUBLIC_URL}/api/frame`}
+      state={state}
+      previousFrame={previousFrame}
+      accepts={acceptedProtocols}
+    >
+      <FrameButton target={`${NEXT_PUBLIC_URL}/frame/${params.slug}`}>
+        Home
+      </FrameButton>
+      <FrameButton target={`${NEXT_PUBLIC_URL}/stats/${params.slug}`}>
+        Stats
+      </FrameButton>
+      <FrameButton
+        action="link"
+        target={`${NEXT_PUBLIC_URL}/api/getspotiuri?fid=${params.slug}`}
+      >
+        Get my profile
+      </FrameButton>
+      <FrameImage
+        src={`${NEXT_PUBLIC_URL}/api/listeningframe?fid=${params.slug}`}
+        aspectRatio="1.91:1"
+      />
+    </FrameContainer>
   );
 }
