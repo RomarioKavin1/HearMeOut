@@ -19,7 +19,7 @@ function generateRandomString(length: number) {
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const state = generateRandomString(16);
   const scope =
-    "user-read-private user-read-email user-read-recently-played user-read-currently-playing user-read-playback-state user-top-read user-library-read";
+    "user-read-private user-read-email user-read-recently-played user-read-currently-playing user-read-playback-state user-top-read user-library-read user-follow-read";
 
   const queryParams = querystring.stringify({
     response_type: "code",
